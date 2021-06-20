@@ -1,24 +1,25 @@
 {
   "schemaVersion": 1,
-  "id": "addon-template",
+  "id": "python-addon",
   "version": "${version}",
-  "name": "Addon Template",
-  "description": "An addon template for the Meteor Addon API.",
+  "name": "Meteor Python Addon",
+  "description": "An addon that enables python support for Meteor.",
   "authors": [
-    "seasnail8169"
+    "Cloudburst"
   ],
   "contact": {
-    "repo": "https://github.com/MeteorDevelopment/meteor-addon-template"
   },
-  "icon": "assets/template/icon.png",
+  "icon": "assets/pythonaddon/icon.png",
   "environment": "client",
   "entrypoints": {
     "meteor": [
-      "meteordevelopment.addons.template.TemplateAddon"
+      "cloudburst.pythonaddon.PythonAddon"
     ]
   },
+  "custom": {
+    "jythonmc:use" : true
+  },
   "mixins": [
-    "template.mixins.json"
   ],
   "depends": {
     "java": ">=16",

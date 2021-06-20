@@ -1,6 +1,7 @@
 plugins {
     id 'fabric-loom' version '0.8-SNAPSHOT'
     id 'maven-publish'
+    id 'java'
 }
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_16
@@ -14,6 +15,7 @@ repositories {
         name = "jitpack"
         url = "https://jitpack.io"
     }
+    maven { url 'https://repo.repsy.io/mvn/enderzombi102/mc/' }
 }
 
 dependencies {
@@ -24,6 +26,10 @@ dependencies {
 
     // Meteor
     modImplementation "com.github.MeteorDevelopment:meteor-client:master-SNAPSHOT"
+
+    // Python
+    modImplementation "com.enderzombi102:JythonMC:$jythonmc_version"
+    include implementation("org.python:jython:$jython_version")
 }
 
 processResources {

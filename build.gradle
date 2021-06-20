@@ -29,7 +29,6 @@ dependencies {
 
     // Python
     modImplementation "com.enderzombi102:JythonMC:$jythonmc_version"
-    include implementation("org.python:jython:$jython_version")
 }
 
 processResources {

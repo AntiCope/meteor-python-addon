@@ -11,7 +11,6 @@ import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.item.Items;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.python.core.Py;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;

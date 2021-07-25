@@ -19,7 +19,6 @@ import java.nio.file.Path;
 public class PythonAddon extends MeteorAddon {
 
     public static final Logger LOG = LogManager.getLogger();
-    public static final Path PYTHON_HOME = MeteorClient.FOLDER.toPath().resolve("python");
     public static final Category CATEGORY = new Category("Python", Items.YELLOW_WOOL.getDefaultStack());
 
     @Override
@@ -28,19 +27,14 @@ public class PythonAddon extends MeteorAddon {
 
         MeteorClient.EVENT_BUS.registerLambdaFactory("cloudburst.pythonaddon", (lookupInMethod, klass) -> (MethodHandles.Lookup) lookupInMethod.invoke(null, klass, MethodHandles.lookup()));
 
-        PathUtils.createPythonHome();
+        PythonSystem.INSTANCE.init();
 
         Commands.get().add(new PythonCommand());
     }
 
     @Override
     public void onRegisterCategories() {
-        if (!PYTHON_HOME.toFile().isDirectory()) return;
-        try {
-            if (PathUtils.isEmpty(PYTHON_HOME)) return;
-        } catch (IOException e) {
-            return;
-        }
+        if (!PythonSystem.INSTANCE.modulesExist()) return;
 
         Modules.registerCategory(CATEGORY);
     }

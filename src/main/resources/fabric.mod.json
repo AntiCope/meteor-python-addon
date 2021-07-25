@@ -16,9 +16,6 @@
       "cloudburst.pythonaddon.PythonAddon"
     ]
   },
-  "custom": {
-    "jythonmc:use" : true
-  },
   "mixins": [
   ],
   "depends": {

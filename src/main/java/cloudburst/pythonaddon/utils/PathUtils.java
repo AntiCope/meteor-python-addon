@@ -1,32 +1,32 @@
 package cloudburst.pythonaddon.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-
-import static cloudburst.pythonaddon.PythonAddon.PYTHON_HOME;
+import java.util.*;
 
 public class PathUtils {
-    public static boolean isEmpty(Path path) throws IOException {
+    public static boolean isEmpty(Path path) {
         if (Files.isDirectory(path)) {
             try (DirectoryStream<Path> directory = Files.newDirectoryStream(path)) {
                 return !directory.iterator().hasNext();
+            } catch (IOException e) {
+                return true;
             }
         }
-
         return false;
     }
 
-    public static void createPythonHome() {
-        if (PYTHON_HOME.toFile().isDirectory()) return;
-
-        if (PYTHON_HOME.toFile().isFile()) PYTHON_HOME.toFile().delete();
-        PYTHON_HOME.toFile().mkdirs();
-
-        // Folder structure
-        PYTHON_HOME.resolve("modules").toFile().mkdirs();
-        PYTHON_HOME.resolve("commands").toFile().mkdirs();
-        PYTHON_HOME.resolve("hud").toFile().mkdirs();
-
-        // TODO: Create basic template or files
+    public static List<File> getFiles(Path path) {
+        if (!Files.isDirectory(path)) return new ArrayList<>();
+        try (DirectoryStream<Path> directory = Files.newDirectoryStream(path)) {
+            List<File> files = new ArrayList<>();
+            for (Path p: directory) {
+                if (p.toFile().isFile()) files.add(p.toFile());
+            }
+            return files;
+        } catch (IOException e) {
+        }
+        return new ArrayList<>();
     }
 }

@@ -1,7 +1,6 @@
 package cloudburst.pythonaddon;
 
 import cloudburst.pythonaddon.commands.PythonCommand;
-import cloudburst.pythonaddon.utils.PathUtils;
 import meteordevelopment.meteorclient.MeteorAddon;
 import meteordevelopment.meteorclient.MeteorClient;
 
@@ -12,9 +11,7 @@ import net.minecraft.item.Items;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.nio.file.Path;
 
 public class PythonAddon extends MeteorAddon {
 

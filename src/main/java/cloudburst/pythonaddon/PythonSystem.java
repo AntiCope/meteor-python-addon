@@ -7,6 +7,7 @@ import meteordevelopment.meteorclient.MeteorClient;
 import meteordevelopment.meteorclient.systems.commands.Commands;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
+import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.python.core.*;
@@ -75,7 +76,7 @@ public class PythonSystem {
         try {
             python.setErr(err_stream);
             python.execfile(pythonHome.resolve(path).toString());
-        } catch (Exception e) {
+        } catch (PyException e) {
             ChatUtils.error("Python", e.getMessage());
             log.error(e);
             return;
@@ -96,14 +97,10 @@ public class PythonSystem {
         if (pythonHome.toFile().isDirectory()) return;
 
         if (pythonHome.toFile().isFile()) pythonHome.toFile().delete();
-        pythonHome.toFile().mkdirs();
+        pythonHome.getParent().toFile().mkdirs();
 
-        // Folder structure
-        pythonHome.resolve("modules").toFile().mkdirs();
-        pythonHome.resolve("commands").toFile().mkdirs();
-        pythonHome.resolve("hud").toFile().mkdirs();
+        PathUtils.copy(FabricLoader.getInstance().getModContainer("python-addon").get().getRootPath().resolve("python").toString(), pythonHome.toString());
 
-        // TODO: Create basic template or files
     }
 
     public boolean modulesExist() {

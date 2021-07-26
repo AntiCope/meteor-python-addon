@@ -29,4 +29,20 @@ public class PathUtils {
         }
         return new ArrayList<>();
     }
+
+    public static void copy(String from, String to) {
+        try {
+            Files.walk(Paths.get(from))
+                .forEach(fromFile -> {
+                    Path dest = Paths.get(to.toString(), fromFile.toString().substring(from.toString().length()));
+                    try {
+                        Files.copy(fromFile, dest);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

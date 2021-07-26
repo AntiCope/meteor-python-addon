@@ -2,8 +2,7 @@ package cloudburst.pythonaddon.pyclasses;
 
 import cloudburst.pythonaddon.PythonAddon;
 import meteordevelopment.meteorclient.systems.modules.Module;
-import org.python.core.PyObject;
-import org.python.core.PyString;
+import org.python.core.*;
 
 
 public class PyModule extends Module {
@@ -18,7 +17,7 @@ public class PyModule extends Module {
     public void onActivate() {
         try {
             pymodule.__getattr__("on_activate").__call__();
-        } catch (Exception e) {
+        } catch (PyException e) {
             error(e.getMessage());
         }
     }
@@ -27,7 +26,7 @@ public class PyModule extends Module {
     public void onDeactivate() {
         try {
             pymodule.__getattr__("on_deactivate").__call__();
-        } catch (Exception e) {
+        } catch (PyException e) {
             error(e.getMessage());
         }
     }
@@ -35,10 +34,10 @@ public class PyModule extends Module {
     private static String getName(PyObject pymodule) {
         try {
             return ((PyString)(pymodule.__getattr__("name"))).toString();
-        } catch (Exception e) {
+        } catch (PyException e) {
             try {
                 return ((PyString)(pymodule.__getattr__("__class__").__getattr__("__name__"))).toString();
-            } catch (Exception e1) {
+            } catch (PyException e1) {
                 return "python-module";
             }
         }
@@ -47,7 +46,7 @@ public class PyModule extends Module {
     private static String getDescription(PyObject pymodule) {
         try {
             return ((PyString)(pymodule.__getattr__("description"))).toString();
-        } catch (Exception e) {
+        } catch (PyException e) {
             return "Python module.";
         }
     }

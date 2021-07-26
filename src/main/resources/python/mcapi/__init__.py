@@ -3,5 +3,5 @@ from .command import Command
 
 from .listener import event_listener
 
-from .imports import mc, modules
+from .imports import mc, modules, baritone_api, baritone
 from .chat import info, warning, error

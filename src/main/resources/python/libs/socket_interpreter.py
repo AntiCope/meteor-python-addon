@@ -1,3 +1,5 @@
+# Source: https://github.com/iwanders/socketserverREPL
+
 import code
 import threading
 import sys

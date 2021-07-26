@@ -9,4 +9,4 @@
 
 
 ## Modifing Python code
-After first launch you should see `python` folder in `.minecraft/meteor-client`.
+After first launch you should see `python` folder in `.minecraft/meteor-client`. This folder contains all python code. `mcapi` package is required in order for modules and commands to work properly.

@@ -11,6 +11,7 @@ public class PyModule extends Module {
     public PyModule(PyObject pymodule) {
         super(PythonAddon.CATEGORY, getName(pymodule), getDescription(pymodule));
         this.pymodule = pymodule;
+        this.pymodule.__setattr__("module", Py.java2py(this));
     }
 
     @Override

@@ -31,8 +31,6 @@ public class PythonAddon extends MeteorAddon {
 
     @Override
     public void onRegisterCategories() {
-        if (!PythonSystem.INSTANCE.modulesExist()) return;
-
         Modules.registerCategory(CATEGORY);
     }
 

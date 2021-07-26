@@ -16,7 +16,6 @@ import org.python.util.PythonInterpreter;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
-import java.util.concurrent.TimeUnit;
 
 public class PythonSystem {
     public static final PythonSystem INSTANCE = new PythonSystem();
@@ -101,10 +100,5 @@ public class PythonSystem {
 
         PathUtils.copy(FabricLoader.getInstance().getModContainer("python-addon").get().getRootPath().resolve("python").toString(), pythonHome.toString());
 
-    }
-
-    public boolean modulesExist() {
-        if (!pythonHome.toFile().isDirectory()) return false;
-        return !PathUtils.isEmpty(pythonHome.resolve("modules"));
     }
 }

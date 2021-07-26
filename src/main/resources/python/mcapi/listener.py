@@ -5,3 +5,4 @@ def event_listener(func, type):
     # func - python function, that will run
     # type - java class, event on which func should fire
     PyListener.addListener(func, type)
+    

@@ -1,20 +1,27 @@
 package cloudburst.pythonaddon;
 
+import cloudburst.pythonaddon.pyclasses.PyCommand;
 import cloudburst.pythonaddon.pyclasses.PyModule;
 import cloudburst.pythonaddon.utils.PathUtils;
 import meteordevelopment.meteorclient.MeteorClient;
+import meteordevelopment.meteorclient.systems.commands.Commands;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
-import org.python.antlr.op.Mod;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.python.core.*;
 import org.python.util.PythonInterpreter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
 
 public class PythonSystem {
     public static final PythonSystem INSTANCE = new PythonSystem();
+    public final PyList pymodules = new PyList();
+    public final PyList pycommands = new PyList();
+    private final Logger log = LogManager.getLogger();
     private final Path pythonHome;
     private final PySystemState systemState;
 
@@ -27,10 +34,36 @@ public class PythonSystem {
     public void init() {
         createPythonHome();
 
-        Modules modules = Modules.get();
+
+        // Initializing python modules
         PathUtils.getFiles(pythonHome.resolve("modules")).forEach(file -> {
-            modules.add(new PyModule(file.getName().toString()));
+            if (file.getName().startsWith("_")) return;
+            if (!(file.getName().endsWith(".py") || file.getName().endsWith(".jy"))) return;
+            log.info("Executing: " + file.getName());
+            execFile(file.toString());
         });
+        Modules modules = Modules.get();
+        log.info("Python modules: " + pymodules.toString());
+        for (Object module : pymodules) {
+            if (module instanceof PyObject) {
+                modules.add(new PyModule((PyObject) module));
+            }
+        }
+
+        // Initializing python commands
+        PathUtils.getFiles(pythonHome.resolve("commands")).forEach(file -> {
+            if (file.getName().startsWith("_")) return;
+            if (!(file.getName().endsWith(".py") || file.getName().endsWith(".jy"))) return;
+            log.info("Executing: " + file.getName());
+            execFile(file.toString());
+        });
+        Commands commands = Commands.get();
+        log.info("Python commands: " + pycommands.toString());
+        for (Object command : pycommands) {
+            if (command instanceof PyObject) {
+                commands.add(new PyCommand((PyObject) command));
+            }
+        }
     }
 
     public PythonInterpreter createInterpreter() {
@@ -41,16 +74,16 @@ public class PythonSystem {
         OutputStream err_stream = new ByteArrayOutputStream();
         try {
             python.setErr(err_stream);
-
             python.execfile(pythonHome.resolve(path).toString());
         } catch (Exception e) {
             ChatUtils.error("Python", e.getMessage());
+            log.error(e);
             return;
         }
         String err;
         err = err_stream.toString();
         if (!err.isEmpty()) {
-            PythonAddon.LOG.error(err);
+            log.error(err);
             ChatUtils.error("Python", err);
         }
     }
@@ -58,7 +91,6 @@ public class PythonSystem {
     public void execFile(String path) {
         execFile(path, createInterpreter());
     }
-
 
     private void createPythonHome() {
         if (pythonHome.toFile().isDirectory()) return;

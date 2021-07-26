@@ -1,7 +1,14 @@
-class Module():
+from cloudburst.pythonaddon import PythonSystem
+
+class Module(object):
     
-    def on_activate():
-        raise NotImplementedError()
+    def __init__(self, name, description="Python module."):
+        PythonSystem.INSTANCE.pymodules.append(self)
+        self.name = name
+        self.description = description
     
-    def on_deactivate():
-        raise NotImplementedError()
+    def on_activate(self):
+        pass
+    
+    def on_deactivate(self):
+        pass

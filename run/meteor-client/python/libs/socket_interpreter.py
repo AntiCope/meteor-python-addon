@@ -151,18 +151,3 @@ class ThreadedTCPServer(ss.ThreadingMixIn, ss.TCPServer):
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.socket.bind(self.server_address)
         
-def main(port=2000):
-    server = ThreadedTCPServer(("127.0.0.1", port), RequestPythonREPL)
-    server.daemon_threads = False
-    server_thread = threading.Thread(target=server.serve_forever)
-    server_thread.daemon = True
-    server_thread.start()
-    while not should_exit:
-        time.sleep(1)
-    print("Shutting down.")
-    server.server_close()
-    server.shutdown()
-    server_thread.join()
-
-
-main()

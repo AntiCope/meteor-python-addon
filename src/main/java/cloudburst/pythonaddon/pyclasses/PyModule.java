@@ -1,26 +1,17 @@
 package cloudburst.pythonaddon.pyclasses;
 
 import cloudburst.pythonaddon.PythonAddon;
-import cloudburst.pythonaddon.PythonSystem;
+import meteordevelopment.meteorclient.systems.modules.Module;
 import org.python.core.PyObject;
-import org.python.util.PythonInterpreter;
+import org.python.core.PyString;
 
-import java.util.Locale;
 
-public class PyModule extends meteordevelopment.meteorclient.systems.modules.Module {
-    private final PythonInterpreter interpreter;
-    private PyObject pymodule = null;
+public class PyModule extends Module {
+    private final PyObject pymodule;
 
-    public PyModule(String filename) {
-        super(PythonAddon.CATEGORY, createName(filename), "Python module.");
-
-        interpreter = PythonSystem.INSTANCE.createInterpreter();
-        PythonSystem.INSTANCE.execFile(filename, interpreter);
-        try {
-            pymodule = interpreter.eval("Module()");
-        } catch (Exception e) {
-            PythonAddon.LOG.error(e);
-        }
+    public PyModule(PyObject pymodule) {
+        super(PythonAddon.CATEGORY, getName(pymodule), getDescription(pymodule));
+        this.pymodule = pymodule;
     }
 
     @Override
@@ -41,12 +32,23 @@ public class PyModule extends meteordevelopment.meteorclient.systems.modules.Mod
         }
     }
 
-    private static String createName(String name) {
-        name = name.toLowerCase(Locale.ROOT);
-        name = name.replaceAll("[\s_]+", "-");
-        name = name.replace(".py", "");
-        name = name.replaceAll("[^a-z0-9-]", "");
+    private static String getName(PyObject pymodule) {
+        try {
+            return ((PyString)(pymodule.__getattr__("name"))).toString();
+        } catch (Exception e) {
+            try {
+                return ((PyString)(pymodule.__getattr__("__class__").__getattr__("__name__"))).toString();
+            } catch (Exception e1) {
+                return "python-module";
+            }
+        }
+    }
 
-        return name;
+    private static String getDescription(PyObject pymodule) {
+        try {
+            return ((PyString)(pymodule.__getattr__("description"))).toString();
+        } catch (Exception e) {
+            return "Python module.";
+        }
     }
 }

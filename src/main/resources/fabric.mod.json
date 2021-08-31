@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "python-addon",
   "version": "${version}",
-  "name": "Meteor Python Addon",
+  "name": "Meteor Python",
   "description": "An addon that enables python support for Meteor.",
   "authors": [
     "Cloudburst"
@@ -18,9 +18,12 @@
   },
   "mixins": [
   ],
+  "custom": {
+    "meteor-client:color": "48,105,152"
+  },
   "depends": {
     "java": ">=16",
-    "minecraft": ">=1.17",
+    "minecraft": ">=@mc_version@",
     "meteor-client": ">0.4.3"
   }
 }

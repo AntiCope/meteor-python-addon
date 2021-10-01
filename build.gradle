@@ -22,6 +22,10 @@ repositories {
     }
     maven { url 'https://jitpack.io' }
     maven { url 'https://www.cursemaven.com' }
+    maven {
+        name = "meteor-maven"
+        url = "https://maven.meteordev.org/snapshots"
+    }
 }
 
 shadowJar {
@@ -39,7 +43,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Meteor
-    modImplementation "com.github.MeteorDevelopment:meteor-client:master-SNAPSHOT"
+    modImplementation "meteordevelopment:meteor-client:SNAPSHOT"
 
     // Python
     implementation "org.python:jython-standalone:2.7.2"

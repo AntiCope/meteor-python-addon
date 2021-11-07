@@ -1,7 +1,7 @@
 package cloudburst.pythonaddon;
 
 import cloudburst.pythonaddon.commands.PythonCommand;
-import meteordevelopment.meteorclient.MeteorAddon;
+import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.MeteorClient;
 
 import meteordevelopment.meteorclient.systems.commands.Commands;

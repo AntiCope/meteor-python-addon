@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/C10udburst/meteor-python-addon/blob/main/src/main/resources/assets/pythonaddon/icon.png?raw=true" alt="logo" width="20%"/>
+  <img src="https://github.com/C10udburst/meteor-python-addon/blob/master/src/main/resources/assets/pythonaddon/icon.png?raw=true" alt="logo" width="20%"/>
 </p>
 <h1 align="center">Meteor Python Addon</h1>
 

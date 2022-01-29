@@ -6,16 +6,30 @@ import cloudburst.pythonaddon.utils.PathUtils;
 import meteordevelopment.meteorclient.MeteorClient;
 import meteordevelopment.meteorclient.systems.commands.Commands;
 import meteordevelopment.meteorclient.systems.modules.Modules;
+import meteordevelopment.meteorclient.utils.network.Http;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.impl.util.log.Log;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.python.core.*;
 import org.python.util.PythonInterpreter;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class PythonSystem {
     public static final PythonSystem INSTANCE = new PythonSystem();
@@ -28,7 +42,8 @@ public class PythonSystem {
     public PythonSystem() {
         pythonHome = MeteorClient.FOLDER.toPath().resolve("python");
         systemState = new PySystemState();
-        systemState.path.append(Py.newString(pythonHome.toString()));
+        systemState.path.append(Py.newStringOrUnicode(pythonHome.toString()));
+        
     }
 
     public void init() {
@@ -45,8 +60,12 @@ public class PythonSystem {
         Modules modules = Modules.get();
         log.info("Python modules: " + pymodules.toString());
         for (Object module : pymodules) {
-            if (module instanceof PyObject) {
-                modules.add(new PyModule((PyObject) module));
+            try {
+                if (module instanceof PyObject) {
+                    modules.add(new PyModule((PyObject) module));
+                }
+            } catch (IllegalArgumentException e) {
+                log.error(e);
             }
         }
 
@@ -60,8 +79,12 @@ public class PythonSystem {
         Commands commands = Commands.get();
         log.info("Python commands: " + pycommands.toString());
         for (Object command : pycommands) {
-            if (command instanceof PyObject) {
-                commands.add(new PyCommand((PyObject) command));
+            try {
+                if (command instanceof PyObject) {
+                    commands.add(new PyCommand((PyObject) command));
+                }
+            } catch (Exception e) {
+                log.error(e);
             }
         }
     }
@@ -75,7 +98,7 @@ public class PythonSystem {
         try {
             python.setErr(err_stream);
             python.execfile(pythonHome.resolve(path).toString());
-        } catch (PyException e) {
+        } catch (Exception e) {
             ChatUtils.error("Python", e.getMessage());
             log.error(e);
             return;
@@ -95,10 +118,38 @@ public class PythonSystem {
     private void createPythonHome() {
         if (pythonHome.toFile().isDirectory()) return;
 
+        log.info("Creating python home");
+
         if (pythonHome.toFile().isFile()) pythonHome.toFile().delete();
         pythonHome.getParent().toFile().mkdirs();
 
-        PathUtils.copy(FabricLoader.getInstance().getModContainer("python-addon").get().getRootPath().resolve("python").toString(), pythonHome.toString());
+        File zipPath = MeteorClient.FOLDER.toPath().resolve("python.zip").toFile();
 
+        try {
+            FileUtils.copyURLToFile(new URL("https://github.com/AntiCope/python-addon-lib/archive/refs/heads/master.zip"), zipPath);
+            ZipFile zip = new ZipFile(zipPath);
+            zip.entries().asIterator().forEachRemaining(file -> {
+                String path = file.toString().replaceFirst("python-addon-lib-master", "python");
+                File outFile = MeteorClient.FOLDER.toPath().resolve(path).toFile();
+                if (file.isDirectory()) {
+                    outFile.mkdirs();
+                }
+                else {
+                    outFile.getParentFile().mkdirs();
+                    try (InputStream zipStream = zip.getInputStream(file)) {
+                        Files.copy(zipStream, outFile.toPath());
+                    } catch (IOException e) {
+                        log.error(e);
+                    }
+                    
+                }
+            });
+            zip.close();
+            
+            Files.deleteIfExists(zipPath.toPath());
+        } catch (IOException e) {
+            log.error(e);
+            return;
+        }
     }
 }

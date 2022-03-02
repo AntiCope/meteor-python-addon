@@ -15,7 +15,7 @@ import java.lang.invoke.MethodHandles;
 
 public class PythonAddon extends MeteorAddon {
 
-    public static final Logger LOG = LoggerFactory.getLogger("Meteor Client");
+    public static final Logger LOG = LoggerFactory.getLogger("PythonAddon");
     public static final Category CATEGORY = new Category("Python", Items.YELLOW_WOOL.getDefaultStack());
 
     @Override

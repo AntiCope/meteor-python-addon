@@ -3,6 +3,12 @@
 </p>
 <h1 align="center">Meteor Python Addon</h1>
 
+<div align="center">
+   
+  <img src="https://user-images.githubusercontent.com/18114966/156883971-ef020185-32ab-412a-9d1e-64e61668aa5e.png" width="24px"> Discord: [discord.gg/9mrRPGKYU3](https://discord.gg/9mrRPGKYU3)
+  
+</div>
+
 ## Installation
 1. Download jar file from [Releases](https://github.com/C10udburst/meteor-python-addon/releases)
 2. Put it in your mods folder

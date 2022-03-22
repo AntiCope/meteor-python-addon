@@ -19,7 +19,8 @@
   "mixins": [
   ],
   "custom": {
-    "meteor-client:color": "48,105,152"
+    "meteor-client:color": "48,105,152",
+    "github:sha": "@gh_hash@"
   },
   "depends": {
     "java": ">=16",

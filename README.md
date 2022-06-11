@@ -1,3 +1,6 @@
+# Archived
+### You should use [JSMacros](https://www.curseforge.com/minecraft/mc-mods/jsmacros) instead.
+
 <p align="center">
   <img src="https://github.com/C10udburst/meteor-python-addon/blob/master/src/main/resources/assets/pythonaddon/icon.png?raw=true" alt="logo" width="20%"/>
 </p>
